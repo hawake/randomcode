@@ -1,3 +1,7 @@
+/**
+ * Released under the terms of the GNU General Public Lincense version 3
+ */
+
 package jrpg;
 
 import java.io.BufferedReader;
