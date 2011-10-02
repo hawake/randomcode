@@ -1,7 +1,8 @@
-/**
+/*
  * Author: hawake
  * This code simply makes an approximation of the root
- * of the equation: f(x) = e^x + (c/x)(e^x - 1) - d
+ * of the following equation through the bisection method:
+ * e^x + (c/x)(e^x - 1) - d
  *
  * Released under the term of the GNU General Public License version 3
  */

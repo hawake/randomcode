@@ -1,7 +1,8 @@
 /**
  * Author: hawake
- * This little code calculates the wavelenght of a Tsunami
- * through the following non-linear equation:
+ * This little code calculates an approximation of the wavelenght
+ * of a Tsunami through the bisection method applied to the 
+ * following non-linear equation:
  * f(L) = L - [( g * T^2 )/( 2 * pi )] * tanh[ ( 2*pi*d )/L]
  *
  * It is just a test, i have to verify the results.
@@ -102,7 +103,7 @@ void welcome() {
 	printf( "Now, insert requested data . . .\n" );
 }
 
-// Again... function of my function f(L)! :P
+// my function f(L)
 double funzione ( double L , double agf , double Tf , double df ) {
 	double f;
 	
