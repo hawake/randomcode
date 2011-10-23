@@ -5,7 +5,7 @@
  * that the method MAY converge.
  * 
  * Author: hawake
- * Version: 1.0
+ * Version: 1.1
  *
  * This software is released under terms of GNU General Public License version 3.
  */
@@ -14,12 +14,13 @@
 #include <math.h>
 #include <stdlib.h>
 
-double ** creaMatrice ( int righe , int colonne );
+double ** creaMatrice ( int size );
 double * creaVettore ( int righe );
+void stampaMatrice ( double ** matrics , int size );
 
 int main () {
 	int i, j, k, n;	// indices for cycles
-	int row , column , iter ;
+	int matrixSize , iter ;
 	double **A ,	// starting matrix
 	       **D ,	// diagonal matrix
 	       **L ,	// lower triangular matrix
@@ -32,36 +33,34 @@ int main () {
    	       *XO ;	// another support vector
 	double max1 = 0.0 , max2 = 0.0 , sum = 0.0 ;
 
-	printf( "\n\nInsert the number of rows for A:  " );
-	scanf( "%d" , &row );
-	printf( "\n\nInsert the number of columns for A: ");
-	scanf( "%d" , &column );
+	printf( "\n\nInsert the size of matrix A:  " );
+	scanf( "%d" , &matrixSize );
 
 	// Starting matrix
-	A = creaMatrice( row , column );
+	A = creaMatrice( matrixSize );
 
 	printf( "\n\nInsert terms for matrix A:\n" );
 
-	for ( i = 0 ; i < row ; i++ ) {
-		for ( j = 0 ; j < column ; j++ ) {
+	for ( i = 0 ; i < matrixSize ; i++ ) {
+		for ( j = 0 ; j < matrixSize ; j++ ) {
 			printf( "Insert element a[%d][%d]: " , i , j );
 			scanf( "%lf" , &A[i][j] );
 		}
 	}
 
 	// Known terms vector
-	B = creaVettore( row );
+	B = creaVettore( matrixSize );
 	printf( "\n\nInsert vector B of known terms...\n" );
 
-	for ( i = 0 ; i < row ; i++ ) {
+	for ( i = 0 ; i < matrixSize ; i++ ) {
 		printf( "Insert element B[%d]: " , i );
 		scanf( "%lf" , &B[i] );
 	}
 
 	// Now i verify the convergence of the iteration method.
 	// So, if the matrix is diagonally dominant the method converge.
-	for ( i = 0 ; i < row ; i++ ) {
-		for ( j = 0 ; j < column ; j++ ) {
+	for ( i = 0 ; i < matrixSize ; i++ ) {
+		for ( j = 0 ; j < matrixSize ; j++ ) {
 			if ( i < j ) {
 				if ( A[i][i] > A[i][j])
 					printf( "\nThis matrix is diagonally dominant!\n" );
@@ -82,9 +81,9 @@ int main () {
 	}
 
 	// Diagonal matrix obtained from A
-	D = creaMatrice( row , column );
-	for ( i = 0 ; i < row ; i++ ) {
-		for ( j = 0 ; j < column ; j++ ) {
+	D = creaMatrice( matrixSize );
+	for ( i = 0 ; i < matrixSize ; i++ ) {
+		for ( j = 0 ; j < matrixSize ; j++ ) {
 			if ( i == j)
 				D[i][j] = A[i][j];
 			else
@@ -93,9 +92,9 @@ int main () {
 	}
 
 	// Lower triangular matrix obtained from A
-	L = creaMatrice( row , column );
-	for ( i = 0 ; i < row ; i++ ) {
-		for ( j = 0 ; j < column ; j++ ) {
+	L = creaMatrice( matrixSize );
+	for ( i = 0 ; i < matrixSize ; i++ ) {
+		for ( j = 0 ; j < matrixSize ; j++ ) {
 			if ( i > j )
 				L[i][j] = A[i][j];
 			else
@@ -104,9 +103,9 @@ int main () {
 	}
 
 	// Upper triangular matrix obtained from A
-	U = creaMatrice( row , column );
-	for ( i = 0 ; i < row ; i++ ) {
-		for ( j = 0 ; j < column ; j++ ) {
+	U = creaMatrice( matrixSize );
+	for ( i = 0 ; i < matrixSize ; i++ ) {
+		for ( j = 0 ; j < matrixSize ; j++ ) {
 			if ( i < j )
 				U[i][j] = A[i][j];
 			else
@@ -115,9 +114,9 @@ int main () {
 	}
 
 	// Inverted diagonal matrix
-	Dinv = creaMatrice( row , column );
-	for ( i = 0 ; i < row ; i++ ) {
-		for ( j = 0 ; j < column ; j++ ) {
+	Dinv = creaMatrice( matrixSize );
+	for ( i = 0 ; i < matrixSize ; i++ ) {
+		for ( j = 0 ; j < matrixSize ; j++ ) {
 			if ( D[i][i] != 0 )
 				Dinv[i][i] = 1 / D[i][i];
 			else
@@ -126,81 +125,51 @@ int main () {
 	}
 
 	// Now i have to create the iteration matrix ...
-	M = creaMatrice( row , column );
-	for ( i = 0 ; i < row ; i++ ) {
-		for ( j = 0 ; j < column ; j++ ) {
+	M = creaMatrice( matrixSize );
+	for ( i = 0 ; i < matrixSize ; i++ ) {
+		for ( j = 0 ; j < matrixSize ; j++ ) {
 			M[i][j] = - Dinv[i][j] * ( L[i][j] + U[i][j] );
 		}
 	}
 
 	// Vectorial known term
-	Q = creaVettore( row );
-	for ( i = 0 ; i < row ; i++ ) {
+	Q = creaVettore( matrixSize );
+	for ( i = 0 ; i < matrixSize ; i++ ) {
 		Q[i] = Dinv[i][i]*B[i];
 	}
 	
 	printf( "\n\nOUTPUT\n\nA:\n" );
 	
-	for ( i = 0 ; i < row ; i++ ) {
-		for ( j = 0 ; j < column ; j++ ) {
-			printf( "%lf " , A[i][j] );
-		}
-		printf( "\n" );
-	}
+	stampaMatrice ( A , matrixSize );
 
 	printf( "\n\nD:\n" );
-	for ( i = 0 ; i < row ; i++ ) {
-		for ( j = 0 ; j < column ; j++ ) {
-			printf( "%lf " , D[i][j] );
-		}
-		printf( "\n" );
-	}
+	stampaMatrice ( D , matrixSize );
 
 	printf( "\n\nU:\n" );
-	for ( i = 0; i < row ; i++ ) {
-		for ( j = 0 ; j < column ; j++ ) {
-			printf( "%lf " , U[i][j] );
-		}
-		printf( "\n" );
-	}
+	stampaMatrice ( U , matrixSize );
 
 	printf( "\n\nL:\n" );
-	for ( i = 0 ; i < row ; i++ ) {
-		for ( j = 0; j < column ; j++ ) {
-			printf( "%lf " , L[i][j] );
-		}
-		printf( "\n" );
-	}
+	stampaMatrice ( L , matrixSize );
 
 	printf( "\n\nDinv:\n" );
-	for ( i = 0 ; i < row ; i++ ) {
-		for ( j = 0 ; j < column ; j++ ) {
-			printf( "%lf " , Dinv[i][j] );
-		}
-		printf( "\n" );
-	}
+	stampaMatrice ( Dinv , matrixSize );
 
 	printf( "\n\nM:\n" );
-	for ( i = 0; i < row ; i++ ) {
-		for ( j = 0;j < column ; j++ ){
-			printf( "%lf " , M[i][j] );
-		}
-		printf( "\n" );
-	}
+	stampaMatrice ( M , matrixSize );
 
 	printf( "\n\nInsert number of iterations: " );
 	scanf( "%d" , &iter );
 	
 	// So the iteration cycles...
-	X = creaVettore( row );
-	XO = creaVettore( row );
+	X = creaVettore( matrixSize );
+	XO = creaVettore( matrixSize );
 
-	for ( i = 0 ; i < row ; i++ ) {
+	for ( i = 0 ; i < matrixSize ; i++ ) {
 		XO[i] = Q[i];
 	}
 	for ( k = 0 ; k < iter ; k++ ) {
-		for ( i = 0 ; i < row ; i++ ) {
-			for (j = 0 ; j < column ; j++ ) {
+		for ( i = 0 ; i < matrixSize ; i++ ) {
+			for (j = 0 ; j < matrixSize ; j++ ) {
 				X[i] = (XO[i] + M[i][j] * XO[j]) + Q[i];
 			}
 		}
@@ -208,14 +177,14 @@ int main () {
 	
 	// print out the result matrix
 	printf( "\n\nResult matrix:\n" );
-	for ( i = 0 ; i < row ; i++ ) {
+	for ( i = 0 ; i < matrixSize ; i++ ) {
 		printf( "%lf" , X[i] );
 		printf( "\n" );
 	}
 
 	// Let's free some memory ...
 	// ... for A
-	for ( i = 0 ; i < row ; i++ )
+	for ( i = 0 ; i < matrixSize ; i++ )
 		free ( A[i] );
 	free ( A );
 
@@ -226,27 +195,27 @@ int main () {
 	free ( Q );
 
 	// ... for D
-	for ( i = 0 ; i < row ; i++ )
+	for ( i = 0 ; i < matrixSize ; i++ )
 		free ( D[i] );
 	free ( D );
 
 	// ... for L
-	for ( i = 0 ; i < row ; i++ )
+	for ( i = 0 ; i < matrixSize ; i++ )
 		free ( L[i] );
 	free ( L );
 
 	// ... for U
-	for ( i = 0 ; i < row ; i++ )
+	for ( i = 0 ; i < matrixSize ; i++ )
 		free ( U[i] );
 	free ( U );
 	
 	// ... for Dinv
-	for ( i = 0 ; i < row ; i++ )
+	for ( i = 0 ; i < matrixSize ; i++ )
 		free ( Dinv[i] );
 	free ( Dinv );
 
 	// ... for M
-	for ( i = 0 ; i < row ; i++ )
+	for ( i = 0 ; i < matrixSize ; i++ )
 		free ( M[i] );
 	free ( M);
 
@@ -254,19 +223,19 @@ int main () {
 }
 
 // This function creates dynamically allocated matrix
-double ** creaMatrice ( int righe , int colonne ) {
+double ** creaMatrice ( int size ) {
 	int i ;
 	double	**ptr ;
 
-	ptr = ( double ** )malloc( righe * sizeof( double * ) );
+	ptr = ( double ** )malloc( size * sizeof( double * ) );
 
 	if ( ptr == NULL ) {
 		printf( "\n\nWARNING! An error occurred during memory allocation!\n\n" );
 		exit( EXIT_FAILURE );
 	}
 
-	for ( i = 0 ; i < righe ; i++ ) {
-		ptr[i] = ( double * )malloc( colonne * sizeof( double ) );
+	for ( i = 0 ; i < size ; i++ ) {
+		ptr[i] = ( double * )malloc( size * sizeof( double ) );
 		if ( ptr[i] == NULL ) {
 			printf( "\n\nWARNING! An error occurred during memory allocation!\n\n" );
 			exit( EXIT_FAILURE );
@@ -290,4 +259,16 @@ double * creaVettore ( int righe ) {
 	}
 
 	return ptr;
+}
+
+// This function print out a matrix
+void stampaMatrice ( double ** matrics , int size) {
+	int i , j ;
+
+	for ( i = 0 ; i < size ; i++ ) {
+		for ( j = 0 ; j < size ; j++ ) {
+			 printf( "%lf " , matrics[i][j] );
+		}
+		printf( "\n" );
+	}
 }
