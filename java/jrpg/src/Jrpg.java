@@ -1,7 +1,3 @@
-/**
- * Released under the terms of the GNU General Public Lincense version 3
- */
-
 package jrpg;
 
 import java.io.BufferedReader;
@@ -23,15 +19,16 @@ public class Jrpg {
             System.out.println( "\t\tversion:" + version + "\n\t\tby hawake\n\n" );
             
             for ( int i = 0 ; i<args.length ; i++ ) {
-                
-                if ( args[i].equals( "-an" ) ) {
+                if ( args[i].equalsIgnoreCase( "-an" ) ) {
                     System.out.println( pwdElaborate( "-an" ) +"\r\n" );
-                } else if ( args[i].equals( "-a" ) ){
+                } else if ( args[i].equalsIgnoreCase( "-a" ) ){
                     System.out.println( pwdElaborate( "-a" ) +"\r\n" );
-                } else if ( args[i].equals( "-n" ) ) {
+                } else if ( args[i].equalsIgnoreCase( "-n" ) ) {
                     System.out.println( pwdElaborate( "-n" ) + "\r\n" ); 
-                } else if ( args[i].equals( "-ans" ) ) {
+                } else if ( args[i].equalsIgnoreCase( "-ans" ) ) {
                     System.out.println( pwdElaborate( "-ans" ) + "\r\n" );
+                } else {
+                    help();
                 }
             }
         } else
@@ -42,13 +39,13 @@ public class Jrpg {
     // Help function
     protected static void help() {
         System.out.println( "\n\n\t [ JAVA RANDOM PASSWORD GENERATOR ] \n" );
-        System.out.println( "\t\tversion: " + version + "\n\t\tby hawake\n\n" );
+        System.out.println( "\t\tversion: " + version + "\n\t\tby hawake\n\tReleased under the terms of GNU General Public License version 3.\n\n" );
         System.out.println( "\nUSAGE: java jrpg [command]" );
         System.out.println( "\nHELP: command | description\n" );
         System.out.println( "\t-a   | Generates an alfabetic password;" );
         System.out.println( "\t-n   | Generates a numeric password;" );
-        System.out.println( "\t-an  | Generates an alfanumeric password;\n\n" );
-        System.out.println( "\t-ans | Generates an alfanumeric password within ASCII symbols");
+        System.out.println( "\t-an  | Generates an alfanumeric password;" );
+        System.out.println( "\t-ans | Generates an alfanumeric password within ASCII symbols;\n\n");
     }
     
     // Password generation function. It uses a different
@@ -132,5 +129,5 @@ public class Jrpg {
     protected static int          n;
     protected static String       buffer  = "";
     protected static String       charset = "";
-    protected static final String version = "1.2";
+    protected static final String version = "1.2.1";
 }
