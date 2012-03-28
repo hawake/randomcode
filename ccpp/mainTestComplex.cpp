@@ -21,7 +21,7 @@ int main() {
     int A , B , C , delta , tempo ;
     Complex x1 , x2 ;
 
-    cout << endl << "\n\nPlease, insert numerical coefficients Inserire i coefficienti dell'equazione di secondo grado " << endl
+    cout << endl << "\n\nPlease, insert numerical coefficients for the equation: " << endl
         << "Ax^2 + Bx + C = 0 per risolverla . . ." << endl ;
     cout << "A: " ;
     cin >> A ;
@@ -70,9 +70,9 @@ int main() {
         cout << "\n\n" << x2.getRealPart() << "\t" << x2.getImaginaryPart() << endl ;
     }
 
-    cout << "Valore di x1: " ;
+    cout << "First root: x1= " ;
     x1.print() ;
-    cout << endl << "Valore di x2: " ;
+    cout << endl << "Second root: x2= " ;
     x2.print() ;
     cout << endl ;
 
