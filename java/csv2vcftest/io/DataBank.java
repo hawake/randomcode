@@ -3,7 +3,7 @@ package csv2vcftest.io;
 /**
  *
  * @author hawake
- * @version 0.1
+ * @version 0.2
  * 
  * Released under the terms of the GNU General Public License version 3
  */
@@ -13,9 +13,10 @@ import java.io.*;
 public class DataBank {
     public DataBank() {
         // Costruttore
+        output_file = "default" ;
     }
     public void setOutputFile ( String outf ) {
-        this.output_file = outf ;
+       this.output_file = outf ;
     }
     public String getOutputFile () {
         return output_file ;
@@ -23,6 +24,17 @@ public class DataBank {
     public static synchronized boolean WriteLine( String line ) {
 		try {
 			File f = new File(output_file);
+			FileOutputStream fos = new FileOutputStream(f,true);
+			PrintStream ps = new PrintStream(fos);
+                        ps.println( line ) ;
+		} catch (IOException err) {
+			System.out.println("Error in Input/Output: " + err);
+		}
+		return true;
+    }
+    public static synchronized boolean WriteLine(String out_file , String line) {
+		try {
+			File f = new File(out_file);
 			FileOutputStream fos = new FileOutputStream(f,true);
 			PrintStream ps = new PrintStream(fos);
                         ps.println("" + line);
@@ -46,17 +58,7 @@ public class DataBank {
         }
         return ret;
     }
-    public static synchronized boolean WriteLine(String out_file , String line) {
-		try {
-			File f = new File(out_file);
-			FileOutputStream fos = new FileOutputStream(f,true);
-			PrintStream ps = new PrintStream(fos);
-                        ps.println("" + line);
-		} catch (IOException err) {
-			System.out.println("Error in Input/Output: " + err);
-		}
-		return true;
-    }
+    
     public static String [] readFile(String out_file, int [] righe) {
         String ret[] = new String[righe.length];
         try {
@@ -72,6 +74,5 @@ public class DataBank {
         }
         return ret;
     }
-    
     private static String output_file ;
 }
